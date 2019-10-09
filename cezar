@@ -1,0 +1,99 @@
+// Шифр Цезаря.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
+//
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+// шифратор
+string shifr(int key, string z)
+{
+    char a[26] = { 'a','b','c','d','e','f','g','h','i','g','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' };
+
+	for (int i = 0; i < z.length(); i++)
+	{
+	
+		for (int j = 0; j < 26; j++)
+		{
+			if (z[i] == a[j])
+			{
+				z[i] = a[(j + key) % 26];
+				goto HUSAINOV_PLACHET;
+			}
+		}
+	HUSAINOV_PLACHET:
+		continue;
+	}
+	
+	return z;
+}
+// дешифратор
+string deshifr(int key, string z)
+{
+	char a[26] = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' };
+
+	for (int i = 0; i < z.length(); i++)
+
+	{
+
+		for (int j = 0; j < 26; j++)
+		{
+			if (z[i] == a[j])
+			{
+				if (j - key < 0)
+				{
+
+					z[i] = a[26 + j - key];
+					goto HUSAINOV_PLACHET;
+				}
+
+				else
+				{
+					z[i] = a[j - key];
+					goto HUSAINOV_PLACHET;
+				}
+			}
+		}
+	HUSAINOV_PLACHET:
+		continue;
+	}
+
+	return z;
+}
+int main()
+{
+	setlocale(LC_ALL, "ru");
+	int key;
+	
+	cout << "Введите ключ для шифрования/дешифровки английского текста: ";
+	scanf_s("%d", &key);
+	cout << endl << "Введите исходный текст: " << endl;
+	
+	string a;
+	cin.ignore(); // без него не работает getline, если ранее осуществлялся ввод.
+	getline(cin, a);
+
+	int vybor;
+
+	cout << "Чтобы зашифровать текст, нажмите 1\n"
+		<< "Чтобы дешифровать текст, нажмите 2\n";
+	cin >> vybor;
+
+	switch (vybor)
+	{
+		case 1:
+		{
+			a = shifr(key, a);
+			cout <<"Результат: \n"<< a;
+			break;
+		}
+		case 2:
+		{
+			a = deshifr(key, a);
+			cout << "Результат: \n" << a;
+			break;
+		}
+	}
+	cout << endl;
+	return 0;
+}
