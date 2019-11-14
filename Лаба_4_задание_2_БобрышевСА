@@ -1,0 +1,135 @@
+// КТсо1-5__Бобрышев_Лаба4_Задание2.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
+//
+
+
+/*Написать программу, которая во вводимом с клавиатуры тексте выберет слова,
+начинающиеся с гласной буквы, и выведет их на экран.*/
+
+//Ввод слов на русском языке.
+
+#include <stdio.h>
+#include <Windows.h>
+
+const int N = 100;
+
+void inpt() 
+{
+	
+	char arr[N];
+	fgets(arr, N, stdin);
+
+	FILE* file;
+
+	fopen_s(&file, "input.txt", "w");
+
+	if (file != NULL)
+	{
+		fputs(arr, file);
+		fclose(file);
+	}
+}
+
+bool vowels(char a)
+{
+	return
+		a == 'а' || a == 'А' ||		a == 'е' || a == 'Е' ||
+		a == 'ё' || a == 'Ё' ||		a == 'и' || a == 'И' ||
+		a == 'о' || a == 'О' ||		a == 'у' || a == 'У' ||
+		a == 'э' || a == 'Э' ||		a == 'ю' || a == 'Ю' ||
+		a == 'ы' || a == 'Ы' ||		a == 'я' || a == 'Я';
+		
+}
+
+bool separator(char a)
+{
+	return
+		a == ' ' || a == ',' ||
+		a == '!' || a == '?' || a == '.' || a == '\0';
+
+}
+
+void outpt()
+{
+	char arr[N]{};
+	char out[N]{};
+	FILE* file;
+
+	fopen_s(&file, "input.txt", "r");
+
+	if (file != NULL)
+	{
+		fgets(arr, N, file);
+		fclose(file);
+	}
+
+	int i = 0,
+		j = 0,
+		k = 0;
+	if (vowels(arr[0]))
+	{
+		while (!separator(arr[i]))
+		{
+			out[j] = arr[j];
+			i += 1;
+			j += 1;
+			k += 1;
+		}
+	}
+
+	if (k != 0)
+	{
+		out[j] = ' ';
+		j += 1;
+	}
+
+	k = 0;
+
+	while(arr[i] != '\0')
+	{
+		if (vowels(arr[i]))
+		{
+			while (!separator(arr[i]))
+			{
+				out[j] = arr[i];
+				i += 1;
+				j += 1;
+				k += 1;
+			}
+
+			if (k != 0)
+			{
+				out[j] = ' ';
+				j += 1;
+			}
+
+			k = 0;
+		}
+		else
+		{
+			while (!separator(arr[i]))
+			{
+				i += 1;
+			}
+			i += 1;
+		}
+	}
+
+	fopen_s(&file, "output.txt", "w");
+
+	if (file != NULL)
+	{
+		fputs(out, file);
+		fclose(file);
+	}
+}
+
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	
+	inpt();
+	outpt();
+	return 0;
+}
+
