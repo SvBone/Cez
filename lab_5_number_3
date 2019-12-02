@@ -1,0 +1,226 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct patient
+{
+	char surname[50]{};
+	char name[50]{};
+	char patronymic[50]{};
+	int date_of_birth;
+	char phone_number[22]{};
+	char address[100]{};
+	char number_of_medical_cards[50]{};
+	char blood_group[10]{};
+	char RH_factor[10]{};
+	char diagnosis[100]{};
+};
+
+void fidic(patient p[], int j)
+{
+	FILE* file;
+
+	fopen_s(&file, "find.txt", "a");
+	if (file != NULL)
+	{
+		fprintf(file, "%s\t", p[j].surname);
+		fprintf(file, "%s\t", p[j].name);
+		fprintf(file, "%s\t", p[j].patronymic);
+		fprintf(file, "%d\t", p[j].date_of_birth);
+		fprintf(file, "%s\t", p[j].phone_number);
+		fprintf(file, "%s\t", p[j].address);
+		fprintf(file, "%s\t", p[j].number_of_medical_cards);
+		fprintf(file, "%s\t", p[j].blood_group);
+		fprintf(file, "%s\t", p[j].RH_factor);
+		fprintf(file, "%s\t", p[j].diagnosis);
+		fprintf(file, "\n");
+		fclose(file);
+	}
+	
+}
+
+void in_FILE(patient p[], int SZ,int k, int i = 0)
+{
+	if (k == 1)
+	{
+		FILE* file;
+
+		fopen_s(&file, "base.txt", "a");
+		if (file != NULL)
+		{
+			while (i < SZ)
+			{
+				fprintf(file, "%s\t", p[i].surname);
+				fprintf(file, "%s\t", p[i].name);
+				fprintf(file, "%s\t", p[i].patronymic);
+				fprintf(file, "%d\t", p[i].date_of_birth);
+				fprintf(file, "%s\t", p[i].phone_number);
+				fprintf(file, "%s\t", p[i].address);
+				fprintf(file, "%s\t", p[i].number_of_medical_cards);
+				fprintf(file, "%s\t", p[i].blood_group);
+				fprintf(file, "%s\t", p[i].RH_factor);
+				fprintf(file, "%s\t", p[i].diagnosis);
+				fprintf(file, "\n");
+				i += 1;
+
+			}
+			
+		}
+		
+	}
+
+	if (k == 0)
+	{
+		while (i < SZ)
+		{
+			printf("%s\t", p[i].surname);
+			printf("%s\t", p[i].name);
+			printf("%s\t", p[i].patronymic);
+			printf("%d\t", p[i].date_of_birth);
+			printf("%s\t", p[i].phone_number);
+			printf("%s\t", p[i].address);
+			printf("%s\t", p[i].number_of_medical_cards);
+			printf("%s\t", p[i].blood_group);
+			printf("%s\t", p[i].RH_factor);
+			printf("%s\t", p[i].diagnosis);
+			printf("\n");
+			i += 1;
+
+		}
+	}
+}
+
+void search(char n[], patient p[], int sz)
+{
+	int i = 0;
+	bool k = true;
+	bool pr = false;
+	int j = 0;
+	while (j < sz)
+	{
+		while (k)
+		{
+			if (n[i] == '\0') k = false;
+			if (p[j].name[i] == '\0') k = false;
+			if (n[i] != p[j].name[i]) k = false;
+			if (n[i] == '\0' && p[j].name[i] == '\0') { pr = true; k = false; }
+			i++;
+		}
+		if (pr == true) {
+			pr = false;
+			fidic(p, j);
+		}
+		j += 1;
+		i = 0;
+		if (j < sz) k = true;
+	}
+
+}
+
+void sortyear(patient p[], int j)
+{
+	patient* f = (patient*)malloc(j * sizeof(patient));
+	int i = 0;
+	int* min = new int[j];
+	
+	for (int i = 0; i < j; i++)
+	{
+		f[i] = p[i];
+	}
+	for (int i = 0; i < j; i += 1)
+	{
+		for (int k = i; k < j; ++ k)
+		{
+			if (f[i].date_of_birth > f[k].date_of_birth)
+			{
+				int temp = f[i].date_of_birth;
+				f[i].date_of_birth = f[k].date_of_birth;
+				f[k].date_of_birth = temp;
+			}
+		}
+	}
+
+	FILE* file;
+	fopen_s(&file, "sortyear.txt", "a");
+	if (file != NULL)
+	{
+		for (int i = 0; i < j; i++) {
+			fprintf(file, "%s\t", f[i].surname);
+			fprintf(file, "%s\t", f[i].name);
+			fprintf(file, "%s\t", f[i].patronymic);
+			fprintf(file, "%d\t", f[i].date_of_birth);
+			fprintf(file, "%s\t", f[i].phone_number);
+			fprintf(file, "%s\t", f[i].address);
+			fprintf(file, "%s\t", f[i].number_of_medical_cards);
+			fprintf(file, "%s\t", f[i].blood_group);
+			fprintf(file, "%s\t", f[i].RH_factor);
+			fprintf(file, "%s\t", f[i].diagnosis);
+			fprintf(file, "\n");
+		}
+		fclose(file);
+	}
+			
+		
+	free(f);
+	f = NULL;
+}
+
+
+
+int main()
+{
+	int SIZE;
+	printf_s("Enter the number of patients: ");
+	scanf_s("%d", &SIZE);
+
+	patient* pats = (patient*)malloc(SIZE * sizeof(patient));
+	
+	int i = 0;
+	while (i < SIZE)
+	{
+		patient new_patient = {};
+		printf_s("\n\t\t%d Pacient: \n\n", (i + 1));
+		if (i == 0)getchar();
+		printf_s("Enter the last name of the patient: ");
+		gets_s(new_patient.surname, 50);
+		printf_s("Enter the name of the patient: ");
+
+		gets_s(new_patient.name, 50);
+		printf_s("Enter the patient's middle name: ");
+		gets_s(new_patient.patronymic, 50);
+		printf_s("Enter the patient's year of birth: ");
+		scanf_s("%d", &new_patient.date_of_birth);
+		printf_s("Enter the patient's phone number: ");
+		getchar();
+		gets_s(new_patient.phone_number, 12);
+		printf_s("Enter the patient's address: ");
+		gets_s(new_patient.address, 100);
+		printf_s("Enter the patient's medical record number: ");
+		gets_s(new_patient.number_of_medical_cards, 50);
+		printf_s("Enter the patient's blood group: ");
+		gets_s(new_patient.blood_group, 22);
+		printf_s("Enter the patient's RH factor: ");
+		gets_s(new_patient.RH_factor, 22);
+		printf_s("Enter the patient's diagnosis: ");
+		gets_s(new_patient.diagnosis, 100);
+		pats[i] = new_patient;
+		i += 1;
+		printf_s("\n");
+	}
+	
+	i = 0;
+	
+	in_FILE(pats, SIZE, 1);
+	in_FILE(pats, SIZE, 0);
+	char name[30];
+	printf_s("Enter a name to search for: ");
+
+	
+	gets_s(name, 30);
+
+	search(name, pats, SIZE);
+	sortyear(pats, SIZE);
+
+	free(pats);
+	pats = NULL;
+	return 0;
+}
